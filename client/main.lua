@@ -79,12 +79,12 @@ function Process(action, start, tick, finish)
                 label = Action.label
             })
 
-            Citizen.CreateThread(function ()
+            CreateThread(function ()
                 if start ~= nil then
                     start()
                 end
                 while isDoingAction do
-                    Citizen.Wait(1)
+                    Wait(1)
                     if tick ~= nil then
                         tick()
                     end
@@ -111,7 +111,7 @@ end
 function ActionStart()
     runProgThread = true
     LocalPlayer.state:set("inv_busy", true, true) -- Busy
-    Citizen.CreateThread(function()
+    CreateThread(function()
         while runProgThread do
             if isDoingAction then
                 if not isAnim then
@@ -140,7 +140,7 @@ function ActionStart()
                     RequestModel(Action.prop.model)
 
                     while not HasModelLoaded(GetHashKey(Action.prop.model)) do
-                        Citizen.Wait(0)
+                        Wait(0)
                     end
 
                     local pCoords = GetOffsetFromEntityInWorldCoords(ped, 0.0, 0.0, 0.0)
@@ -171,7 +171,7 @@ function ActionStart()
                         RequestModel(Action.propTwo.model)
 
                         while not HasModelLoaded(GetHashKey(Action.propTwo.model)) do
-                            Citizen.Wait(0)
+                            Wait(0)
                         end
 
                         local pCoords = GetOffsetFromEntityInWorldCoords(ped, 0.0, 0.0, 0.0)
@@ -202,7 +202,7 @@ function ActionStart()
 
                 DisableActions(ped)
             end
-            Citizen.Wait(0)
+            Wait(0)
         end
     end)
 end
@@ -210,7 +210,7 @@ end
 function Cancel()
     isDoingAction = false
     wasCancelled = true
-    LocalPlayer.state:set("inv_busy", false, true) -- Not Busy
+    LocalPlayer.state:set("inv_busy", false, true)
     ActionCleanup()
 
     SendNUIMessage({
@@ -221,7 +221,7 @@ end
 function Finish()
     isDoingAction = false
     ActionCleanup()
-    LocalPlayer.state:set("inv_busy", false, true) -- Not Busy
+    LocalPlayer.state:set("inv_busy", false, true)
 end
 
 function ActionCleanup()
@@ -236,10 +236,15 @@ function ActionCleanup()
         end
     end
 
-    DetachEntity(NetToObj(prop_net), 1, 1)
-    DeleteEntity(NetToObj(prop_net))
-    DetachEntity(NetToObj(propTwo_net), 1, 1)
-    DeleteEntity(NetToObj(propTwo_net))
+    if prop_net then
+        DetachEntity(NetToObj(prop_net), 1, 1)
+        DetachEntity(NetToObj(prop_net))
+    end
+        if propTwo_net then
+            DetachEntity(NetToObj(propTwo_net), 1, 1)
+            DetachEntity(NetToObj(propTwo_net))
+    end
+
     prop_net = nil
     propTwo_net = nil
     runProgThread = false
@@ -248,46 +253,46 @@ end
 function loadAnimDict(dict)
 	while (not HasAnimDictLoaded(dict)) do
 		RequestAnimDict(dict)
-		Citizen.Wait(5)
+		Wait(5)
 	end
 end
 
 function DisableActions(ped)
     if Action.controlDisables.disableMouse then
-        DisableControlAction(0, 1, true) -- LookLeftRight
-        DisableControlAction(0, 2, true) -- LookUpDown
-        DisableControlAction(0, 106, true) -- VehicleMouseControlOverride
+        DisableControlAction(0, 1, true)
+        DisableControlAction(0, 2, true)
+        DisableControlAction(0, 106, true)
     end
 
     if Action.controlDisables.disableMovement then
-        DisableControlAction(0, 30, true) -- disable left/right
-        DisableControlAction(0, 31, true) -- disable forward/back
-        DisableControlAction(0, 36, true) -- INPUT_DUCK
-        DisableControlAction(0, 21, true) -- disable sprint
+        DisableControlAction(0, 30, true)
+        DisableControlAction(0, 31, true)
+        DisableControlAction(0, 36, true)
+        DisableControlAction(0, 21, true)
     end
 
     if Action.controlDisables.disableCarMovement then
-        DisableControlAction(0, 63, true) -- veh turn left
-        DisableControlAction(0, 64, true) -- veh turn right
-        DisableControlAction(0, 71, true) -- veh forward
-        DisableControlAction(0, 72, true) -- veh backwards
-        DisableControlAction(0, 75, true) -- disable exit vehicle
+        DisableControlAction(0, 63, true)
+        DisableControlAction(0, 64, true)
+        DisableControlAction(0, 71, true)
+        DisableControlAction(0, 72, true)
+        DisableControlAction(0, 75, true)
     end
 
     if Action.controlDisables.disableCombat then
-        DisablePlayerFiring(PlayerId(), true) -- Disable weapon firing
-        DisableControlAction(0, 24, true) -- disable attack
-        DisableControlAction(0, 25, true) -- disable aim
-        DisableControlAction(1, 37, true) -- disable weapon select
-        DisableControlAction(0, 47, true) -- disable weapon
-        DisableControlAction(0, 58, true) -- disable weapon
-        DisableControlAction(0, 140, true) -- disable melee
-        DisableControlAction(0, 141, true) -- disable melee
-        DisableControlAction(0, 142, true) -- disable melee
-        DisableControlAction(0, 143, true) -- disable melee
-        DisableControlAction(0, 263, true) -- disable melee
-        DisableControlAction(0, 264, true) -- disable melee
-        DisableControlAction(0, 257, true) -- disable melee
+        DisablePlayerFiring(PlayerId(), true)
+        DisableControlAction(0, 24, true)
+        DisableControlAction(0, 25, true)
+        DisableControlAction(1, 37, true)
+        DisableControlAction(0, 47, true)
+        DisableControlAction(0, 58, true)
+        DisableControlAction(0, 140, true)
+        DisableControlAction(0, 141, true)
+        DisableControlAction(0, 142, true)
+        DisableControlAction(0, 143, true)
+        DisableControlAction(0, 263, true)
+        DisableControlAction(0, 264, true)
+        DisableControlAction(0, 257, true)
     end
 end
 
