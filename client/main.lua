@@ -236,15 +236,15 @@ function ActionCleanup()
         end
     end
 
+
     if prop_net then
         DetachEntity(NetToObj(prop_net), 1, 1)
         DetachEntity(NetToObj(prop_net))
     end
         if propTwo_net then
-            DetachEntity(NetToObj(propTwo_net), 1, 1)
-            DetachEntity(NetToObj(propTwo_net))
+        DetachEntity(NetToObj(propTwo_net), 1, 1)
+        DetachEntity(NetToObj(propTwo_net))
     end
-
     prop_net = nil
     propTwo_net = nil
     runProgThread = false
