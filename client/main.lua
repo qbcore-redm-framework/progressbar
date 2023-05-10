@@ -241,7 +241,7 @@ function ActionCleanup()
         DetachEntity(NetToObj(prop_net), 1, 1)
         DetachEntity(NetToObj(prop_net))
     end
-        if propTwo_net then
+    if propTwo_net then
         DetachEntity(NetToObj(propTwo_net), 1, 1)
         DetachEntity(NetToObj(propTwo_net))
     end
