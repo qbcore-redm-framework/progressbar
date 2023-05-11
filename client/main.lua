@@ -78,7 +78,8 @@ function Process(action, start, tick, finish)
                 duration = Action.duration,
                 label = Action.label
             })
-
+            DisableControlAction(0, 0x156F7119, true)
+            DisableControlAction(0, 0xF84FA74F, true)
             CreateThread(function ()
                 if start ~= nil then
                     start()
@@ -88,7 +89,9 @@ function Process(action, start, tick, finish)
                     if tick ~= nil then
                         tick()
                     end
-                    if IsControlJustPressed(0, 200) and Action.canCancel then
+                    
+                    if IsDisabledControlJustPressed( 0, 0xF84FA74F) or IsDisabledControlJustPressed(0, 0x156F7119) and Action.canCancel then
+                        print(Action.canCancel)
                         TriggerEvent("progressbar:client:cancel")
                     end
 
@@ -210,7 +213,7 @@ end
 function Cancel()
     isDoingAction = false
     wasCancelled = true
-    LocalPlayer.state:set("inv_busy", false, true)
+    LocalPlayer.state:set("inv_busy", false, true) -- Not Busy
     ActionCleanup()
 
     SendNUIMessage({
@@ -221,7 +224,7 @@ end
 function Finish()
     isDoingAction = false
     ActionCleanup()
-    LocalPlayer.state:set("inv_busy", false, true)
+    LocalPlayer.state:set("inv_busy", false, true) -- Not Busy
 end
 
 function ActionCleanup()
@@ -229,13 +232,14 @@ function ActionCleanup()
 
     if Action.animation ~= nil then
         if Action.animation.task ~= nil or (Action.animation.animDict ~= nil and Action.animation.anim ~= nil) then
+            print("Stopping Animation")
+            ClearPedTasks(ped)
             ClearPedSecondaryTask(ped)
             StopAnimTask(ped, Action.animDict, Action.anim, 1.0)
         else
             ClearPedTasks(ped)
         end
     end
-
 
     if prop_net then
         DetachEntity(NetToObj(prop_net), 1, 1)
@@ -259,40 +263,34 @@ end
 
 function DisableActions(ped)
     if Action.controlDisables.disableMouse then
-        DisableControlAction(0, 1, true)
-        DisableControlAction(0, 2, true)
-        DisableControlAction(0, 106, true)
+        DisableControlAction(0, 0xA987235F, true) -- LookLeftRight (mouse lr)
+        DisableControlAction(0, 0xD2047988, true) -- LookUpDown (mouse ud)
+        DisableControlAction(0, 0x39CCABD5, true) -- VehicleMouseControlOverride
     end
 
     if Action.controlDisables.disableMovement then
-        DisableControlAction(0, 30, true)
-        DisableControlAction(0, 31, true)
-        DisableControlAction(0, 36, true)
-        DisableControlAction(0, 21, true)
+        DisableControlAction(0, 0x4D8FB4C1, true) -- disable left/right (a/d)
+        DisableControlAction(0, 0xFDA83190, true) -- disable forward/back (w/s)
+        DisableControlAction(0, 0xDB096B85, true) -- diable duck (ctrl)
+        DisableControlAction(0, 0x8FFC75D6, true) -- disable sprint (shift)
     end
 
     if Action.controlDisables.disableCarMovement then
-        DisableControlAction(0, 63, true)
-        DisableControlAction(0, 64, true)
-        DisableControlAction(0, 71, true)
-        DisableControlAction(0, 72, true)
-        DisableControlAction(0, 75, true)
+        DisableControlAction(0, 0x126796EB, true) -- horse turn LR (a/d)
+        DisableControlAction(0, 0x3BBDEFEF, true) -- horse turn UD (w/s)
+        DisableControlAction(0, 0x5AA007D7, true) -- horse sprint (shift)
+        DisableControlAction(0, 0xCBDB82A8, true) -- disable exit vehicle (f)
     end
 
     if Action.controlDisables.disableCombat then
-        DisablePlayerFiring(PlayerId(), true)
-        DisableControlAction(0, 24, true)
-        DisableControlAction(0, 25, true)
-        DisableControlAction(1, 37, true)
-        DisableControlAction(0, 47, true)
-        DisableControlAction(0, 58, true)
-        DisableControlAction(0, 140, true)
-        DisableControlAction(0, 141, true)
-        DisableControlAction(0, 142, true)
-        DisableControlAction(0, 143, true)
-        DisableControlAction(0, 263, true)
-        DisableControlAction(0, 264, true)
-        DisableControlAction(0, 257, true)
+        DisablePlayerFiring(PlayerId(), true) -- Disable weapon firing (lmb)
+        DisableControlAction(0, 0x07CE1E61, true) -- disable attack (lmb)
+        DisableControlAction(0, 0xF84FA74F, true) -- disable aim (rmb)
+        DisableControlAction(0, 0x73846677, true) -- may not be needed (detonate)
+        DisableControlAction(0, 0x0AF99998, true) -- may not be needed (grenade)
+        DisableControlAction(0, 0xB2F377E8, true) -- disable melee (f)
+        DisableControlAction(0, 0xB5EEEFB7, true) -- disable block (r)
+        DisableControlAction(0, 0x0283C582, true) -- may not be needed (attack2)
     end
 end
 
@@ -324,3 +322,25 @@ end)
 RegisterNUICallback('FinishAction', function(data, cb)
 	Finish()
 end)
+
+-- Example Usage using the qbrcore export:
+
+-- local IfaksDict = "SCRIPT_RE@GOLD_PANNER@GOLD_SUCCESS"
+-- local IfaksAnim = "panning_idle_no_water"
+-- RegisterCommand("progresstest", function()
+--     local ped = PlayerPedId()
+--     exports['qbr-core']:Progressbar("use_bandage", "fubbernuckle", 3000, false, true, {
+--         disableMovement = true,
+--         disableCarMovement = true,
+-- 		disableMouse = true,
+-- 		disableCombat = true,
+--     }, {
+-- 		animDict = IfaksDict,
+-- 		anim = IfaksAnim,
+-- 		flags = 1,
+--     }, {}, {}, function() -- Done
+--         print("Done")
+--     end, function() -- Cancel
+--         print("Cancel")
+--     end)
+-- end)
