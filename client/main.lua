@@ -91,6 +91,7 @@ function Process(action, start, tick, finish)
                     end
                     
                     if IsDisabledControlJustPressed( 0, 0xF84FA74F) or IsDisabledControlJustPressed(0, 0x156F7119) and Action.canCancel then
+                        print(Action.canCancel)
                         TriggerEvent("progressbar:client:cancel")
                     end
 
@@ -231,6 +232,7 @@ function ActionCleanup()
 
     if Action.animation ~= nil then
         if Action.animation.task ~= nil or (Action.animation.animDict ~= nil and Action.animation.anim ~= nil) then
+            print("Stopping Animation")
             ClearPedTasks(ped)
             ClearPedSecondaryTask(ped)
             StopAnimTask(ped, Action.animDict, Action.anim, 1.0)
@@ -323,22 +325,25 @@ end)
 
 -- Example Usage using the qbrcore export:
 
--- local IfaksDict = "SCRIPT_RE@GOLD_PANNER@GOLD_SUCCESS"
--- local IfaksAnim = "panning_idle_no_water"
--- RegisterCommand("progresstest", function()
---     local ped = PlayerPedId()
---     exports['qbr-core']:Progressbar("use_bandage", "fubbernuckle", 3000, false, true, {
---         disableMovement = true,
---         disableCarMovement = true,
--- 		disableMouse = true,
--- 		disableCombat = true,
---     }, {
--- 		animDict = IfaksDict,
--- 		anim = IfaksAnim,
--- 		flags = 1,
---     }, {}, {}, function() -- Done
---         print("Done")
---     end, function() -- Cancel
---         print("Cancel")
---     end)
--- end)
+local IfaksDict = "SCRIPT_RE@GOLD_PANNER@GOLD_SUCCESS"
+local IfaksAnim = "panning_idle_no_water"
+RegisterCommand("progresstest", function()
+    Citizen.InvokeNative(0xF6BEE7E80EC5CA40, 1)
+    Citizen.InvokeNative(0xF02A9C330BBFC5C7, 2)
+    
+    local ped = PlayerPedId()
+    exports['qbr-core']:Progressbar("use_bandage", "Look at me mah, Im doing stuff!", 10000, false, true, {
+        disableMovement = true,
+        disableCarMovement = true,
+		disableMouse = true,
+		disableCombat = true,
+    }, {
+		animDict = IfaksDict,
+		anim = IfaksAnim,
+		flags = 1,
+    }, {}, {}, function() -- Done
+        print("Done")
+    end, function() -- Cancel
+        print("Cancel")
+    end)
+end)

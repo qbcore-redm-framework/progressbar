@@ -18,6 +18,7 @@ files {
 
     'html/css/bootstrap.min.css',
     'html/js/jquery.min.js',
+    'html/img/*.png',
 }
 
 exports {
