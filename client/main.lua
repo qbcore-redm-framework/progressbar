@@ -91,7 +91,6 @@ function Process(action, start, tick, finish)
                     end
                     
                     if IsDisabledControlJustPressed( 0, 0xF84FA74F) or IsDisabledControlJustPressed(0, 0x156F7119) and Action.canCancel then
-                        print(Action.canCancel)
                         TriggerEvent("progressbar:client:cancel")
                     end
 
@@ -232,7 +231,6 @@ function ActionCleanup()
 
     if Action.animation ~= nil then
         if Action.animation.task ~= nil or (Action.animation.animDict ~= nil and Action.animation.anim ~= nil) then
-            print("Stopping Animation")
             ClearPedTasks(ped)
             ClearPedSecondaryTask(ped)
             StopAnimTask(ped, Action.animDict, Action.anim, 1.0)
