@@ -326,8 +326,11 @@ end)
 -- local IfaksDict = "SCRIPT_RE@GOLD_PANNER@GOLD_SUCCESS"
 -- local IfaksAnim = "panning_idle_no_water"
 -- RegisterCommand("progresstest", function()
+--     Citizen.InvokeNative(0xF6BEE7E80EC5CA40, 1)
+--     Citizen.InvokeNative(0xF02A9C330BBFC5C7, 2)
+    
 --     local ped = PlayerPedId()
---     exports['qbr-core']:Progressbar("use_bandage", "fubbernuckle", 3000, false, true, {
+--     exports['qbr-core']:Progressbar("use_bandage", "Look at me mah, Im doing stuff!", 10000, false, true, {
 --         disableMovement = true,
 --         disableCarMovement = true,
 -- 		disableMouse = true,
