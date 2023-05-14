@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
-
-html {
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+ html {
     overflow: hidden;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 body {
@@ -14,56 +13,117 @@ body {
     width: 100%;
 }
 
-.progress-container {
-    display: none;
-    z-index: 5;
-    color: #fff;
-    font-family: sans-serif;
-    width: 15%;
-    position: fixed;
-    bottom: 12.65%;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.progress-labels {
-    width: 100%;
-    height: 4vh;
-    line-height: 4vh;
-    text-align: center;
+.watch {
     position: absolute;
-    display: inline-block;
-    white-space: nowrap;
+    left: 50%;
+    bottom: 300px;
+    transform: translate(-50%, 100%);
+    width: 250px;
+    height: 250px;
+    background-image: url("../img/pocketwatch.png");
+    background-size: cover;
+    z-index: 2;
+
+} 
+
+.label {
+    position: absolute;
+    left: 50%;
+    bottom: 50px;
+    transform: translate(-50%, 100%);
+    text-shadow: 1px -1px 20px black;
+    line-height: inherit;
+    font-size: 2vh;
+    color: #f8f9fa;
+    z-index: 3;
+    font-weight: bolder;
+    font-family: 'Century Gothic';
 }
 
-.progress-labels div {
-    font-size: 1.3vh;
-    line-height: 4vh;
-    position: relative;
-    color: #ffffff;
-    z-index: 10;
-    font-weight: bold;
-    font-variant: small-caps;
-}
-
-.progress-bar-container {
-    width: 100%;
-    height: 4vh;
-    background: rgba(0, 0, 0, 0.246);
-    text-align: left;
+.container {
+    position: absolute;
+    left: 50%;
+    bottom: 200px;
+    transform: translate(-50%, 100%);
+    width: 145px;
+    height: 145px;
+    border-radius: 50%;
+    background-color: #3a3320 ;
     overflow: hidden;
-    position: relative;
-    display: block;
-    white-space: nowrap;
-    border-radius: 2px;
-}
-
-.progress-bar {
-    background-color: #396991;
-    width: 0%;
-    height: 4vh;
-    transition: width 0.3s;
-    transition-timing-function: ease-out;
-}
+    z-index: 1;
+  }
+  .half-right,
+  .half-left {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-color: transparent;
+    overflow: hidden;
+  }
+  .half-right:after,
+  .half-left:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #c6c7be;
+  }
+  .half-right {
+    left: 50%;
+    right: 0;
+  }
+  .half-right:after {
+    right: 100%;
+    transform-origin: center right;
+  }
+  .half-left {
+    left: 0;
+    right: 50%;
+  }
+  .half-left:after {
+    left: 100%;
+    transform-origin: center left;
+  }
+  
+  .container.animate .half-right:after {
+    animation: turn 0.5s linear forwards;
+  }
+  
+  .container.animate .half-left:after {
+    animation: turn 0.5s 0.5s linear forwards;
+  }
+  
+  @-moz-keyframes turn {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(180deg);
+    }
+  }
+  @-webkit-keyframes turn {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(180deg);
+    }
+  }
+  @-o-keyframes turn {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(180deg);
+    }
+  }
+  @keyframes turn {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(180deg);
+    }
+  }
+  
