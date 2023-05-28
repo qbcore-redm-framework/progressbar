@@ -40,6 +40,7 @@ local isPropTwo = false
 local prop_net = nil
 local propTwo_net = nil
 local runProgThread = false
+local finishedDuration = false
 
 RegisterNetEvent('progressbar:client:ToggleBusyness')
 AddEventHandler('progressbar:client:ToggleBusyness', function(bool)
@@ -72,6 +73,7 @@ function Process(action, start, tick, finish)
             wasCancelled = false
             isAnim = false
             isProp = false
+            finishedDuration = false
 
             SendNUIMessage({
                 action = "progress",
@@ -101,6 +103,10 @@ function Process(action, start, tick, finish)
                 if finish ~= nil then
                     finish(wasCancelled)
                 end
+            end)
+            CreateThread(function()
+                Wait(Action.duration)
+                finishedDuration = true
             end)
         else
             TriggerEvent("QBCore:Notify", "You are already doing something!", "error")
@@ -318,6 +324,7 @@ AddEventHandler("progressbar:client:cancel", function()
 end)
 
 RegisterNUICallback('FinishAction', function(data, cb)
+    if not finishedDuration then return end
 	Finish()
 end)
 
